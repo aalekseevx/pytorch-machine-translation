@@ -17,15 +17,24 @@ if __name__ == "__main__":
 
     model_config = yaml.load(open("configs/model_config.yaml", 'r'),   Loader=yaml.Loader)
 
-    # TODO: Инициализируйте модель Seq2SeqTransformer
-    model = Seq2SeqTransformer(device=DEVICE)
+    model = Seq2SeqTransformer(
+        device=DEVICE,
+        emb_size=model_config['emb_size'],
+        vocab_size=4000,
+        max_seq_len=30,
+        target_tokenizer=dm.target_tokenizer,
+        lr=model_config['lr'],
+        nhead=model_config['nhead'],
+        num_encoder_layers=model_config['num_encoder_layers'],
+        num_decoder_layers=model_config['num_decoder_layers'],
+    )
 
     logger = TXTLogger('training_logs')
     trainer_cls = trainer.Trainer(model=model, model_config=model_config, logger=logger)
 
     if model_config['try_one_batch']:
         train_dataloader = [list(train_dataloader)[0]]
-        dev_dataloader = [list(train_dataloader)[0]]
+        dev_dataloader = [list(dev_dataloader)[0]]
 
     trainer_cls.train(train_dataloader, dev_dataloader)
 

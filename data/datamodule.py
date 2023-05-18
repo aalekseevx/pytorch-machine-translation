@@ -2,6 +2,7 @@ from torch.utils.data import DataLoader
 
 from data.mt_dataset import MTDataset
 from data.space_tokenizer import SpaceTokenizer
+from data.bpe_tokenizer import BPETokenizer
 from data.utils import TextUtils, short_text_filter_function
 
 
@@ -33,13 +34,11 @@ class DataManager:
         source_train_sentences, source_val_sentences = source_sentences[:train_size], source_sentences[train_size:]
         target_train_sentences, target_val_sentences = target_sentences[:train_size], target_sentences[train_size:]
 
-        # TODO: Замените на BPE токенизатор
-        self.source_tokenizer = SpaceTokenizer(source_train_sentences, pad_flag=True)
+        self.source_tokenizer = BPETokenizer(source_train_sentences, vocab_size=4000, max_length=self.config['max_length'])
         tokenized_source_train_sentences = [self.source_tokenizer(s) for s in source_train_sentences]
         tokenized_source_val_sentences = [self.source_tokenizer(s) for s in source_val_sentences]
 
-        # TODO: Замените на BPE токенизатор
-        self.target_tokenizer = SpaceTokenizer(target_train_sentences, pad_flag=True)
+        self.target_tokenizer = BPETokenizer(target_train_sentences, vocab_size=4000, max_length=self.config['max_length'])
         tokenized_target_train_sentences = [self.target_tokenizer(s) for s in target_train_sentences]
         tokenized_target_val_sentences = [self.target_tokenizer(s) for s in target_val_sentences]
 

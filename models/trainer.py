@@ -28,7 +28,7 @@ class Trainer:
                 val_epoch_loss = val_epoch_loss / len(val_dataloader)
 
                 input_tensor, target_tensor = batch
-                predicted_samples, _ = self.model.forward(input_tensor)
+                predicted_samples, _ = self.model.forward(batch)
                 bleu_score, actual_sentences, predicted_sentences = self.model.eval_bleu(predicted_samples, target_tensor)
                 print('Current BLEU: ', bleu_score)
                 for a, b in zip(actual_sentences[:5], predicted_sentences[:5]):
